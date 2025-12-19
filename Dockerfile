@@ -1,4 +1,4 @@
-# Use official PHP image with extensions
+# Base image with PHP
 FROM php:8.2-fpm
 
 # Set working directory
@@ -23,11 +23,7 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy existing .env file
-# (Optional, you can also use Render environment variables)
-# COPY .env .
-
-# Cache configs
+# Cache Laravel configs
 RUN php artisan config:cache
 RUN php artisan route:cache
 RUN php artisan view:cache
@@ -35,5 +31,5 @@ RUN php artisan view:cache
 # Expose port
 EXPOSE 8000
 
-# Start Laravel
+# Start Laravel server
 CMD php artisan serve --host=0.0.0.0 --port=8000
