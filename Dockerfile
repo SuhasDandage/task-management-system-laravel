@@ -37,5 +37,6 @@ RUN mkdir -p \
 EXPOSE 8000
 
 # Clear caches & start app (NO shell needed)
-CMD php artisan serve --host=0.0.0.0 --port=8000
+CMD php artisan migrate --force \
+ && php artisan serve --host=0.0.0.0 --port=8000
 
