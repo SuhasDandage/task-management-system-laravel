@@ -1,21 +1,22 @@
-# Base image with PHP
-FROM php:8.2-fpm
-
-# Set working directory
-WORKDIR /var/www/html
+FROM php:8.2-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libpq-dev \
-    libonig-dev \
     libzip-dev \
+    zip \
     curl \
-    && docker-php-ext-install pdo pdo_pgsql mbstring zip
+    nodejs \
+    npm \
+    && docker-php-ext-install pdo pdo_pgsql zip
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /app
 
 # Copy project files
 COPY . .
@@ -23,13 +24,14 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Cache Laravel configs
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
+# Install frontend deps & build assets
+RUN npm install && npm run build
 
-# Expose port
+# Permissions
+RUN chmod -R 777 storage bootstrap/cache
+
+# Expose port Render expects
 EXPOSE 8000
 
-# Start Laravel server
+# Start Laravel
 CMD php artisan serve --host=0.0.0.0 --port=8000
