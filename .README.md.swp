@@ -1,0 +1,19 @@
+# Task Management System (Laravel)
+
+A simple task management web application built using Laravel.
+
+## Features
+- User authentication (Laravel Breeze)
+- Create, update, delete tasks
+- Task status management
+- Form validation
+- MVC architecture
+
+## Tech Stack
+- PHP
+- Laravel
+- MySQL
+- HTML, CSS
+
+## Purpose
+This project was built to practice Laravel backend development and CRUD operations.
